@@ -71,7 +71,9 @@ int main(int argc, char **argv) {
     //       and allocate the faults[] array.  faults[f] will hold the
     //       total number of page faults that occur when f frames are
     //       available.  Use calloc so all entries start at zero.
-
+    PageQueue* pgQ = pqInit(maxFrames);
+    unsigned long* faults = calloc(maxFrames, sizeof(long));
+    
     // Process each memory access from the trace file
     while (!feof(ifp)) {
         fread(&traceRecord, sizeof(p2AddrTr), 1, ifp);
@@ -79,7 +81,7 @@ int main(int argc, char **argv) {
         // Extract page number by shifting off the offset bits
         unsigned long pageNum = traceRecord.addr >> offsetBits;
         numAccesses++;
-
+        
         // Print progress indicator to stderr every PROGRESS_INTERVAL accesses
         // (also prints the last page number seen — useful for early debugging)
         if ((numAccesses % PROGRESS_INTERVAL) == 0) {
@@ -93,7 +95,14 @@ int main(int argc, char **argv) {
         //                    (fault for any allocation with fewer than d+1 frames)
         //
         //       Update faults[] accordingly.
-
+        int res = pqAccess(pgQ, pageNum);
+        if(res == -1){
+            faults[numAccesses] = maxFrames;
+        }
+        else{
+            faults[numAccesses] = res;
+        }
+        
     }
 
     fprintf(stderr, "\n%lu total accesses processed\n", numAccesses);
@@ -103,11 +112,14 @@ int main(int argc, char **argv) {
     printf("Frames,Missees,Miss Rate\n");
 
     // TODO: Loop from frame count 1 to maxFrames and print each row:
-    //       printf("%d,%lu,%f\n", frameCount, faults[frameCount],
-    //              (double)faults[frameCount] / (double)numAccesses);
+    for(int frameCount = 1; frameCount<=maxFrames; frameCount++){
+        printf("%d,%lu,%f\n", frameCount, faults[frameCount],(double)faults[frameCount] / (double)numAccesses);
+    }
 
     // TODO: Free your PageQueue and the faults[] array,
     //       then close the file.
-
+    pqFree(pgQ);
+    free(faults);
+    fclose(ifp);
     return 0;
 }

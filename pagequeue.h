@@ -60,4 +60,6 @@ void pqFree(PageQueue *pq);
  */
 void pqPrint(PageQueue *pq);
 
+void appendElementpgQ(PageQueue* list, unsigned long element);
+void deleteElementpgQ(PageQueue* list, int position);
 #endif  // PAGEQUEUE_H
