@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
     //       total number of page faults that occur when f frames are
     //       available.  Use calloc so all entries start at zero.
     PageQueue* pgQ = pqInit(maxFrames);
-    unsigned long* faults = calloc(maxFrames, sizeof(long));
+    unsigned long* faults = calloc(maxFrames, sizeof(unsigned long));
     
     // Process each memory access from the trace file
     while (!feof(ifp)) {
@@ -97,10 +97,15 @@ int main(int argc, char **argv) {
         //       Update faults[] accordingly.
         int res = pqAccess(pgQ, pageNum);
         if(res == -1){
-            faults[numAccesses] = maxFrames;
+            for(int i = 0; i<(maxFrames); i++){
+                faults[i] = faults[i]+1;
+            }
         }
         else{
-            faults[numAccesses] = res;
+            for(int i = 0; i<res; i++){
+                faults[i] = faults[i]+1;
+            }
+            
         }
         
     }

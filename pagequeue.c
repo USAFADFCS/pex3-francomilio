@@ -46,7 +46,8 @@ long pqAccess(PageQueue *pq, unsigned long pageNum) {
     for(int i = 0; i<pq->size; i++){
         
         if(currNode != NULL && (currNode->pageNum) == pageNum){//hit
-            deleteElementpgQ(pq, pq->size-i);
+            
+            deleteElementpgQ(pq, (pq->size-1)-i);
             appendElementpgQ(pq, pageNum);
             return(i);
         }
@@ -106,14 +107,16 @@ void appendElementpgQ(PageQueue* list, unsigned long element){
     }
     list->tail->next = NULL;
     list->head->prev = NULL;
-    list->size++;
+    (list->size)++;
 }
 
 void deleteElementpgQ(PageQueue* list, int position){
     PqNode* currentNode = list->head;
-
+    
     for(int currentPos = 0; currentPos < position; currentPos++){
-        currentNode = currentNode->next;
+        if(currentNode != NULL && currentNode->next != NULL){
+            currentNode = currentNode->next;
+        }
     }
 
     if(currentNode->prev != NULL){
