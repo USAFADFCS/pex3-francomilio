@@ -1,12 +1,17 @@
 /** main.c
  * ===========================================================
- * Name: _______________________, __ ___ 2026
- * Section: CS483 / ____
+ * Name: Franco Milio, 23 Apr 2026
+ * Section: CS483 / M4
  * Project: PEX3 - Page Replacement Simulator
  * Purpose: Reads a BYU binary memory trace file and simulates
  *          LRU page replacement to measure fault rates across
  *          varying frame allocations.
- * Documentation: TBD
+ * Documentation: I referenced online guides in the making of tables.
+ *  I referenced both the assignment and the slides attached. I asked multiple 
+ * questions to my teacher in regards to debugging my code and getting the 
+ * debugger to work. I used online guides such as W3Schools and GeeksforGeeks 
+ * as reference material for the functionality of and implementation tips for the 
+ * doubly linked list.
  * =========================================================== */
 #include <stdio.h>
 #include <stdlib.h>
